@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog Post</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 id="title" style="color:white;font-family:'Times New Roman', Times, serif;"></h1>
+    <div id="content" style="color:white;font-family:Georgia, serif;font-size:18px; line-height:1.6;"></div>
+
+    <br><br>
+    <a href="index.html">← Back to Posts</a>
+  </div>
+
+  <script>
+    const slug = new URLSearchParams(window.location.search).get("slug");
+
+    async function loadPost() {
+      try {
+        const res = await fetch(`http://localhost:5000/api/posts/${slug}`);
+        const post = await res.json();
+
+        document.getElementById("title").textContent = post.title;
+        document.getElementById("content").innerHTML = post.content; // content is HTML
+      } catch (error) {
+        document.getElementById("title").textContent = "Post Not Found";
+        document.getElementById("content").innerHTML = "<p style='color:red;'>The blog post you're looking for doesn't exist or couldn't be loaded.</p>";
+      }
+    }
+
+    loadPost();
+  </script>
+</body>
+</html>

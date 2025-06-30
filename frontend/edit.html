@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Post</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2 style="color:white;font-family:'Times New Roman', Times, serif;font-size:50px;">Edit Post</h2>
+
+    <input type="text" id="title" />
+    <textarea id="content" rows="10"></textarea>
+    <button onclick="updatePost()">Update Post</button>
+    <br><br>
+    <a href="index.html">← Back to Posts</a>
+  </div>
+
+<script>
+  const slug=new URLSearchParams(window.location.search).get("slug");
+  async function load(){
+    const res=await fetch(`http://localhost:5000/api/posts/${slug}`);
+    const post=await res.json();
+    document.getElementById("title").value=post.title;
+    document.getElementById("content").value=post.content;
+  }
+
+  async function updatePost(){
+    const title=document.getElementById("title").value;
+     const content=document.getElementById("content").value;
+     const res=await fetch(`http://localhost:5000/api/posts/${slug}`,{
+      method:"PUT",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({title,content})
+     })
+
+
+  const data=await res.json();
+  if(res.ok){
+    alert("data edited successfully");
+    window.location.href="index.html";
+  }
+   else{
+       alert("error"+(data.error||"update failed"));
+   }
+  }
+
+
+load();
+
+
+</script>
+</body>
+</html>

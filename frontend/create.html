@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Post</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2 style="color:white;font-family:'Times New Roman', Times, serif;font-size:50px;">Create New Post</h2>
+
+    <input type="text" id="title" placeholder="Enter post title" />
+    <textarea id="content" rows="10" placeholder="Write your blog content..."></textarea>
+
+    <button onclick="createPost()">Publish Post</button>
+    <br><br>
+    <a href="index.html">← Back to Posts</a>
+  </div>
+<script>
+  async function createPost(){
+  const title=document.getElementById("title").value;
+ const content=document.getElementById("content").value;
+ if(!title||!content){
+  alert("All fields are required");
+  return ;
+ }
+ const res=await fetch("http://localhost:5000/api/posts/create",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({title,content})
+ });
+ const data=await res.json();
+ if(res.ok)
+ {
+  alert("post-created");
+  window.location.href="index.html";
+
+ }
+ else{
+  alert("err:"+data.error);
+ }
+}
+
+
+</script>
+
+</body>
+</html>
